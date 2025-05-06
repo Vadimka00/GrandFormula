@@ -183,23 +183,26 @@
   
         // Сохранение при blur или Enter (без Shift)
         const save = async () => {
-            let newVal = textarea.value.trim();
+        let newVal = textarea.value.trim();
+        const isNumeric = !isNaN(Number(newVal.replace(/\s+/g, '').replace('%', '')));
 
-            // Удаляем пробелы и символ процента
+        if (isNumeric) {
+            // Удаляем пробелы и символ процента только у числовых значений
             newVal = newVal.replace(/\s+/g, '').replace('%', '');
+        }
 
-            // Отправляем как число или строку
-            await patchData(url, { [fieldKey]: newVal });
+        // Отправляем как число или строку
+        await patchData(url, { [fieldKey]: newVal });
 
-            // Преобразуем обратно для отображения
-            let displayVal = newVal;
-            const num = Number(newVal);
-            if (!isNaN(num)) {
-                displayVal = num.toLocaleString('ru-RU');
-            }
+        // Преобразуем обратно для отображения
+        let displayVal = newVal;
+        const num = Number(newVal);
+        if (!isNaN(num)) {
+            displayVal = num.toLocaleString('ru-RU');
+        }
 
-            // Обновляем текст элемента
-            element.textContent = displayVal;
+        // Обновляем текст элемента
+        element.textContent = displayVal;
         };
         textarea.addEventListener('blur', save);
         textarea.addEventListener('keydown', e => {
