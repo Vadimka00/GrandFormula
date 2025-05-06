@@ -1,0 +1,676 @@
+/* Основной файл стилей */
+:root {
+    /* Основная палитра */
+    --accent-start:   #6a11cb;
+    --accent-end:     #2575fc;
+    --bg:             #eef2ff;
+    --card-bg:        #ffffff;
+    --text-primary:   #1f1f1f;
+    --text-secondary: #555555;
+    --radius:         0.75rem;
+    --shadow-light:   0 4px 12px rgba(0, 0, 0, 0.08);
+    --transition:     0.25s ease;
+    --modal-bg:       rgba(0,0,0,0.5);
+    --tooltip-bg:     var(--accent-end);
+  
+    /* Дополнительная палитра */
+    --accent-warm:    #FF6B6B;
+    --accent-mint:    #4ECDC4;
+    --accent-sun:     #FFD93D;
+    --accent-teal:    #A8DADC;
+    --accent-navy:    #477cc8;
+  }
+  
+  /* Сброс базовых стилей */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: sans-serif;
+    background-color: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+  
+
+/* Липкая секция метрик */
+.metrics {
+    position: sticky;
+    top: 0;
+    background-color: var(--bg);
+    padding: 1rem 0;
+    z-index: 100;
+    box-shadow: var(--shadow-light);
+  }
+  
+  /* Список метрик */
+  .metrics-list {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  
+  /* Каждый блок метрики */
+  .metric-item {
+    position: relative;
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-light);
+    padding: 1rem;
+    flex: 1 1 12rem;
+    max-width: 20rem;
+    transition: transform var(--transition), box-shadow var(--transition);
+    cursor: default;
+  }
+  
+  .g-mask {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    background-color: var(--accent-end);
+    mask: url("/static/images/g_logo.svg") no-repeat center / contain;
+    -webkit-mask: url("/static/images/g_logo.svg") no-repeat center / contain;
+    vertical-align: text-bottom;
+  }
+
+  /* Лёгкий подъём при наведении */
+  .metric-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  }
+  
+  /* Заголовок и значение */
+  .metric-title {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  /* Иконка информации */
+  .info-icon {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 1rem;
+    color: var(--accent-navy);
+    transition: color var(--transition);
+  }
+  
+  /* Всплывающая подсказка */
+  .tooltip {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--tooltip-bg);
+    color: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-light);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.5rem);
+    transition: opacity var(--transition), transform var(--transition);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    z-index: 1001;
+  }
+  
+  /* Показываем подсказку по наведению */
+  .metric-item:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* Адаптив: для экранов до 768px — по 2 в ряд */
+  @media (max-width: 1200px) {
+
+      /* Заголовок и значение */
+  .metric-title {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  .metric-value {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  }
+
+  /* Адаптив: для экранов до 768px — по 2 в ряд */
+  @media (max-width: 900px) {
+
+    /* Заголовок и значение */
+.metric-title {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+.metric-value {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+}
+
+  /* Адаптив: для экранов до 768px — по 2 в ряд */
+  @media (max-width: 760px) {
+    .metrics-list {
+      justify-content: center;
+    }
+    .metric-item {
+      flex: 1 1 45%;
+      max-width: none;
+    }
+
+
+    .forecast-sidebar {
+        top: 30%;
+    }
+  }
+  
+  @media (max-width: 760px) {
+    .metrics-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0;           /* если нужно */
+      }
+  
+    .metric-item {
+      display: flex;
+      flex: 1 1 45%;
+      align-items: center;
+      padding: 0 0.5rem 0;     /* чуть больше отступа сверху/снизу */
+      background: none;
+      box-shadow: none;
+      border: none;
+      border-radius: 0%;    
+    }
+
+    .metric-item:hover {
+        /* Полностью сбрасываем любые hover-стили */
+        background: none;
+        box-shadow: none;
+        transform: none;
+        /* и, если нужно, запрещаем курсор-руку */
+        cursor: default;
+      }
+
+    /* Задаём порядок иконке и значению */
+    .metric-title {
+      order: 1;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .info-icon {
+        position: static;
+        top: auto;
+        right: auto;
+        order: 2;
+        margin-left: 0.25rem;
+        font-size: 1rem;
+        color: var(--accent-navy);
+        transition: color var(--transition);
+    }
+    
+
+    .metric-value {
+      order: 3;
+      margin-left: auto;      /* прижмёт значение вправо */
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+  
+    /* Скрываем Tooltip в списке (если не нужен) */
+    .metric-item .tooltip {
+      display: none;
+    }
+  }
+  
+
+  .forecast-sidebar {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%) translateX(0);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    width: 16rem;
+    background-color: var(--card-bg);
+    border-radius: 0.75rem 0 0 0.75rem;
+    box-shadow: var(--shadow-light);
+    transition: transform 0.3s ease-in-out;
+    z-index: 100;
+  }
+
+  .slider-group span{
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: var(--accent-end);
+  }
+
+  .slider-group .info-icon{
+    right: 0.2rem;
+    top: 0.5rem;
+  }
+
+/* Всплывающая подсказка слева */
+    .slider-group .tooltip {
+        position: absolute;
+        /* Отступ слева: ширина тултипа + 0.5rem зазор */
+        left: calc(-100% - 0.5rem);
+        top: 50%;
+        transform: translate(0.5rem, -50%); /* стартовая точка чуть правее (для анимации) */
+        padding: 0.75rem;
+        background-color: var(--tooltip-bg);
+        color: #fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-light);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity var(--transition), transform var(--transition);
+        font-size: 0.875rem;
+        line-height: 1.4;
+        z-index: 10;
+        white-space: wrap; /* чтобы размер адаптировался под содержимое */
+  }
+  
+  /* Анимация при ховере: смещаем в нужное место и показываем */
+  .slider-group:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, -50%);
+  }
+
+  /* Состояние скрытого сайдбара */
+  .forecast-sidebar.collapsed {
+    transform: translateY(-50%) translateX(16rem);
+  }
+  
+  /* Toggle-ручка */
+  .sidebar-toggle {
+    position: absolute;
+    top: 50%;
+    left: -60px;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 100px;
+    font-size: 1.2rem;
+    background-color: var(--card-bg);
+    border-radius: 4px 0 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  /* Иконка внутри toggle */
+  .sidebar-toggle i {
+    font-size: 1rem;
+    transition: transform 0.3s;
+  }
+  
+  /* Плавный hover-эффект для слайдеров */
+  .slider-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.2rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  /* Пример hover */
+  .slider-group:hover {
+    background: #eef2ff;
+  }
+
+  /* --- пресеты --- */
+.presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+  }
+  .presets .preset {
+    all: unset;
+    padding: 0.3em 0.5em;
+    border-radius: 0.25em;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: background 0.2s;
+  }
+  .presets .preset:hover,
+  .presets .preset.active {
+    background: var(--accent-end);
+    color: #fff;
+  }
+  
+  /* --- кастомный ввод --- */
+  .custom {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 0.25em;
+    align-items: center;
+  }
+  .custom input {
+    width: 4em;
+    padding: 0.2em;
+    font-size: 0.85em;
+    border: none;
+    border-radius: 0.25em;
+  }
+  .custom select {
+    padding: 0.2em;
+    font-size: 0.85em;
+    border: none;
+    border-radius: 0.25em;
+  }
+  .custom button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem 0.5rem;
+    border: none;
+    border-radius: 0.25em;
+    cursor: pointer;
+    font-size: 0.85em;
+    background: var(--accent-end);
+    color: #fff;
+    transition: background 0.2s;
+  }
+  .custom button:hover {
+    background: var(--accent-start);
+  }
+  
+
+  /* Адаптив: для экранов до 768px — по 2 в ряд */
+  @media (max-width: 760px) {
+
+    .forecast-sidebar {
+        top: 65%;
+        z-index: 1000;
+    }
+
+    .slider-group {
+        gap: 0.2rem;
+    }
+
+    .slider-group.slider-column label{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+    }
+
+    .slider-group label{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-left: 0.8rem;
+      }
+
+
+      .slider-group .info-icon {
+        position: absolute;
+        left: 0;
+        font-size: 1rem;
+        color: var(--accent-navy);
+        transition: color var(--transition);
+    }
+
+  }
+
+  @media (max-width: 480px) {
+    .slider-group .tooltip {
+      display: none;
+    }
+  }
+
+
+.modal {
+    display: none;
+}
+
+.modal.active {
+    position: absolute;
+    top: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    width: 100%;
+    height: 100vh;
+    z-index: 1001;
+}
+
+.modal-header {
+    font-size: 1.4rem;
+    font-weight: 900;
+}
+
+.modal-desc {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 2rem;
+    color: white;
+    background: none;
+    border: none;
+}
+
+.chart-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: var(--card-bg);
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 1.5rem;
+  }
+
+  .chart-container h2 {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.25rem;
+  }
+
+  .chart-container p {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--accent-start);
+  }
+
+
+  .chart {
+    position: relative;
+    padding-bottom: 1.5rem; /* место для оси X */
+  }
+
+  /* фоновые сетка линии каждые 10% */
+  .chart::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 1.5rem;
+    background-image:
+        linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px);
+    background-size: 10% 100%;
+    pointer-events: none;
+  }
+
+  .bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 3rem;
+    background: #efefef;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .bar-label {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    font-weight: 600;
+    color: #1f1f1f;
+    gap: 0.5rem;
+  }
+
+  .bar-percent {
+    color: var(--accent-start);
+    font-weight: 900;
+  }
+
+  .bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 1s ease;
+  }
+
+  .bar:last-child {
+    margin-bottom: 0;
+  }
+
+  .bar-amount {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-end);
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .axis-x {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--accent-end);
+  }
+
+@media (max-width: 760px) {
+    .chart-container {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+
+    .axis-x span {
+        font-size: 0.675rem;
+    }
+    
+} 
+
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+#chart-info {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: #fff;
+  z-index: 10;
+  font-family: sans-serif;
+}
+
+#chart-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent-end);
+}
+
+#chart-time {
+  font-size: 1rem;
+  color: #a1a1a1;
+}
+
+
+.reset-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+  height: 50px;
+}
+
+.reset-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  background-color: var(--accent-end);
+  padding: 1rem;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: var(--accent-start);
+  }
+}

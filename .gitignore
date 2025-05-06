@@ -1,0 +1,16 @@
+# .gitignore
+
+# Python
+__pycache__/
+*.pyc
+instance/
+*.sqlite3
+.env
+
+# Virtual environment
+venv/
+
+# Logs and temp
+logs/
+*.log
+simulation_log.json

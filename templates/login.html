@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вход в админ-панель</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    :root {
+      /* вставь сюда свою палитру */
+      --accent-start: #6a11cb;
+      --accent-end: #2575fc;
+      --bg: #eef2ff;
+      --card-bg: #ffffff;
+      --text-primary: #1f1f1f;
+      --text-secondary: #555555;
+      --radius: 0.75rem;
+      --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --transition: 0.25s ease;
+      --modal-bg: rgba(0, 0, 0, 0.5);
+      --tooltip-bg: var(--accent-end);
+    }
+
+    body {
+      background: var(--bg);
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      mask: url("/static/images/g_logo.svg") no-repeat center / contain;
+      -webkit-mask: url("/static/images/g_logo.svg") no-repeat center / contain;
+      margin: 0 auto 1rem;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input {
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.75rem;
+      border: none;
+      border-radius: var(--radius);
+      background: linear-gradient(to right, var(--accent-start), var(--accent-end));
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .link a {
+      color: var(--accent-end);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo"></div>
+    <h2>Вход</h2>
+    <form id="loginForm">
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Пароль" required />
+        <button type="submit">Войти</button>
+      </form>
+      <div id="loginMessage" class="link"></div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = e.target.email.value;
+      const password = e.target.password.value;
+    
+      const response = await fetch("/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+    
+      const result = await response.json();
+      const msg = document.getElementById("loginMessage");
+      msg.textContent = result.message || result.error;
+      msg.style.color = response.ok ? "green" : "red";
+    
+      if (response.ok) {
+        // перенаправление на админку
+        setTimeout(() => location.href = "/admin/dashboard", 1000);
+      }
+    });
+    </script>
+
+</body>
+</html>

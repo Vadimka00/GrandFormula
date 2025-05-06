@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админ-панель</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    :root {
+      /* твоя палитра */
+      --accent-start: #6a11cb;
+      --accent-end: #2575fc;
+      --bg: #eef2ff;
+      --card-bg: #ffffff;
+      --text-primary: #1f1f1f;
+      --text-secondary: #555555;
+      --radius: 0.75rem;
+      --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --transition: 0.25s ease;
+    }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+    }
+    header {
+        position: sticky;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: white;
+    }
+    header a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .edit-input {
+    /* Унаследовать шрифт, размер, высоту строки и цвет */
+    font: inherit;
+    line-height: inherit;
+    color: inherit;
+
+    /* Убираем фон браузера и рамку */
+    background: transparent;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+
+    /* Отступы */
+    padding: 0.25rem;
+
+    /* Блок, чтобы можно было задать ширину/авто-ширину */
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+
+    /* Отключаем ресайз по углу, т.к. высоту мы подстраиваем скриптом */
+    resize: none;
+    overflow: hidden;
+    }
+
+    .edit-input:focus {
+    outline: none;
+    border-color: var(--primary-color, #66afe9);
+    box-shadow: 0 0 0 2px rgba(102,175,233,0.3);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    @media(min-width: 768px) {
+      .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(min-width: 1200px) {
+      .dashboard-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+      transition: transform var(--transition);
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+    .card h3 {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      font-size: 1.2rem;
+      color: var(--accent-end);
+    }
+    .card p {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Админ-панель</h1>
+    <a href="/admin/logout">Выйти</a>
+  </header>
+
+  <section>
+    <h2 style="text-align:center; margin-top:2rem; color: var(--accent-end);">Метрики</h2>
+    <div class="dashboard-grid" id="metrics-container"></div>
+  </section>
+
+  <section>
+    <h2 style="text-align:center; margin-top:2rem; color: var(--accent-end);">Настройки</h2>
+    <div class="dashboard-grid" id="options-container"></div>
+  </section>
+
+  <script>
+
+    // Заблокировать чтение из localStorage
+    localStorage.getItem = function() {
+    console.warn('localStorage.getItem блокирован — используется только API');
+    return null;
+    };
+
+    // Опционально: заблокировать запись
+    localStorage.setItem = function() {
+    console.warn('localStorage.setItem блокирован — используется только API');
+    };
+
+    // И удаление тоже
+    localStorage.removeItem = function() {};
+
+    async function patchData(url, payload) {
+      const res = await fetch(url, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        console.error('Error patching', await res.json());
+      }
+    }
+  
+    function makeEditable(element, fieldKey, url) {
+      element.addEventListener('click', () => {
+        // Если уже редактируется — выходим
+        if (element.querySelector('textarea')) return;
+  
+        // Сохраняем текущее значение
+        const currentText = element.textContent.trim();
+  
+        // Создаем textarea вместо input
+        const textarea = document.createElement('textarea');
+        textarea.className = 'edit-input';
+        textarea.value = currentText;
+        textarea.rows = 1;
+        textarea.style.height = 'auto';
+        textarea.style.overflow = 'hidden';
+        textarea.style.resize = 'none';
+  
+        // Авто-адаптация высоты
+        const adjustHeight = () => {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+        };
+        textarea.addEventListener('input', adjustHeight);
+        // Один раз подстроим сразу после вставки
+        setTimeout(adjustHeight, 0);
+  
+        // Вставляем textarea
+        element.innerHTML = '';
+        element.appendChild(textarea);
+        textarea.focus();
+  
+        // Сохранение при blur или Enter (без Shift)
+        const save = async () => {
+            let newVal = textarea.value.trim();
+
+            // Удаляем пробелы и символ процента
+            newVal = newVal.replace(/\s+/g, '').replace('%', '');
+
+            // Отправляем как число или строку
+            await patchData(url, { [fieldKey]: newVal });
+
+            // Преобразуем обратно для отображения
+            let displayVal = newVal;
+            const num = Number(newVal);
+            if (!isNaN(num)) {
+                displayVal = num.toLocaleString('ru-RU');
+            }
+
+            // Обновляем текст элемента
+            element.textContent = displayVal;
+        };
+        textarea.addEventListener('blur', save);
+        textarea.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            textarea.blur();
+          }
+        });
+      });
+    }
+  
+    async function fetchData() {
+      const [metricsRes, optionsRes] = await Promise.all([
+        fetch('/api/metrics'),
+        fetch('/api/options')
+      ]);
+      const metrics = await metricsRes.json();
+      const options = await optionsRes.json();
+  
+      // Очистка контейнера метрик
+      const mContainer = document.getElementById('metrics-container');
+      mContainer.innerHTML = '';
+  
+      metrics.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.id = m.metric_id;
+  
+        // Заголовок метрики
+        const title = document.createElement('h2');
+        title.textContent = m.metric_title;
+        makeEditable(title, 'metric_title', `/api/metrics/${m.metric_id}`);
+        card.appendChild(title);
+  
+        // Значение метрики (если число)
+        const valNum = Number(m.metric_value);
+        if (!isNaN(valNum)) {
+          const h3 = document.createElement('h3');
+  
+            // Создаем span для префикса без вложенных span
+            let prefixSpan = document.createElement('span');
+            if (m.currency?.includes('dollar')) {
+            prefixSpan.textContent = '$ ';
+            } else if (m.currency?.includes('grand')) {
+            prefixSpan.className = 'g-mask';
+            // Добавляем пробел после маски
+            prefixSpan.insertAdjacentText('beforeend', ' ');
+            }
+  
+          const valueSpan = document.createElement('span');
+          const formatted = valNum.toLocaleString('ru-RU', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 4
+          });
+          valueSpan.textContent = formatted;
+          makeEditable(valueSpan, 'metric_value', `/api/metrics/${m.metric_id}`);
+  
+          h3.append(prefixSpan, valueSpan);
+          card.appendChild(h3);
+        }
+  
+        // Tooltip (если есть)
+        if (m.tooltip) {
+          const tip = document.createElement('p');
+          tip.textContent = m.tooltip;
+          makeEditable(tip, 'tooltip', `/api/metrics/${m.metric_id}`);
+          card.appendChild(tip);
+        }
+  
+        mContainer.appendChild(card);
+      });
+  
+     // Опции
+    const oContainer = document.getElementById('options-container');
+    oContainer.innerHTML = '';
+    const optionLabels = {
+      max_users: 'Максимально пользователей',
+      grand_generation: 'Суточное рождение',
+      max_raiting: 'Максимальный рейтинг',
+      max_mining_percent: 'Максимальный процент на майнинг',
+      budget_percent: 'Процент на бюджет',
+      referral_percent: 'Максимальный процент на реф. начисления',
+      business_place_percent: 'Максимальный процент на бизнес места',
+      deposit_percent: 'Максимальный процент на депозит'
+    };
+    const percentFields = new Set([
+      'max_mining_percent', 'budget_percent', 'referral_percent',
+      'business_place_percent', 'deposit_percent'
+    ]);
+
+    Object.entries(options).forEach(([key, value]) => {
+      if (!(key in optionLabels)) return;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.field = key;
+
+      const title = document.createElement('h2');
+      title.textContent = optionLabels[key];
+      card.appendChild(title);
+
+      const p = document.createElement('h3');
+
+        // Создаём основной <span> с числом
+        const spanValue = document.createElement('span');
+        spanValue.className = 'editable-value';
+        const num = Number(value);
+        if (!isNaN(num)) {
+        spanValue.textContent = num > 100
+            ? num.toLocaleString('ru-RU')
+            : num.toString();
+        } else {
+        spanValue.textContent = value;
+        }
+        p.appendChild(spanValue);
+
+        // Добавляем символ % в отдельном <span>, если поле процентное
+        if (percentFields.has(key)) {
+        const spanPercent = document.createElement('span');
+        spanPercent.className = 'percent-symbol';
+        spanPercent.textContent = '%';
+        p.appendChild(spanPercent);
+        }
+
+        // Дополнительный элемент-маска, если нужно
+        if (key === 'grand_generation') {
+        const spanMask = document.createElement('span');
+        spanMask.className = 'g-mask';
+        spanMask.insertAdjacentText('beforeend', ' ');
+        p.appendChild(spanMask);
+        }
+
+        // Добавляем редактирование только на число
+        makeEditable(spanValue, key, `/api/options/1`);
+        card.appendChild(p);
+        oContainer.appendChild(card);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', fetchData);
+</script>
+  
+</body>
+</html>

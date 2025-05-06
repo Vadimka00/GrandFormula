@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Метрики и распределение эмиссии</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Ваши стили -->
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+    <aside class="forecast-sidebar collapsed">
+
+        <div class="sidebar-toggle">
+            <i class="fa-solid fa-chevron-left"></i>
+          </div>
+
+        <h2>Параметры</h2>
+
+
+
+        <!-- 1) Быстрые пресеты -->
+        <div class="presets">
+            <button class="preset" data-value="1"  data-unit="d">+1 день</button>
+            <button class="preset" data-value="10"  data-unit="d">+10 дней</button>
+            <button class="preset" data-value="1"  data-unit="w">+1 неделя</button>
+            <button class="preset" data-value="1"  data-unit="m">+1 меcяц</button>
+            <button class="preset" data-value="2"  data-unit="m">+2 месяца</button>
+            <button class="preset" data-value="1"  data-unit="y">+1 год</button>
+        </div>
+    
+        <div class="slider-group slider-column" data-title="Пользователи"
+         data-desc="Количество пользователей онлайн в данный момент">
+            <label for="avg-users" class="setting-name">Пользователи
+              <span id="val-users" class="slider-value">1000</span>
+            </label>
+            <input
+              type="range"
+              id="avg-users"
+              min="0"
+              max="1000"
+              step="1"
+              value="0"
+            />
+            <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+            <div class="tooltip">Количество пользователей онлайн в данный момент</div>
+          </div>
+
+          <div class="slider-group" data-title="Средний рейтинг"
+           data-desc="Усреднённый пользовательский рейтинг добычи по трём уровням (1, 2, 3) с шагом 0.1 (от 1.1 до 1.9), суммарно до 5.7.">
+          <label for="avg-rating" class="setting-name">Ср. рейтинг
+            <span id="val-rating" class="slider-value">3.0</span>
+          </label>
+          <input
+            type="range"
+            id="avg-rating"
+            min="1.0"
+            max="5.7"
+            step="0.1"
+            value="3.0"
+          >
+          <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+          <div class="tooltip">Усреднённый пользовательский рейтинг добычи по трём уровням (1, 2, 3) с шагом 0.1 (от 1.1 до 1.9), суммарно до 5.7.</div>
+        </div>
+      
+        <div class="slider-group" data-title="Доля grand"
+         data-desc="Доля суммы покупки, которую компания в маркетплейсе выбирает получить не в долларах, а в Grand (в процентах).">
+          <label for="pay-percent" class="setting-name">Доля grand
+            <span id="val-pay" class="slider-value">50%</span>
+          </label>
+          <input
+            type="range"
+            id="pay-percent"
+            min="0"
+            max="100"
+            step="1"
+            value="50"
+          >
+          <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+          <div class="tooltip">Доля суммы покупки, которую компания в маркетплейсе выбирает получить не в долларах, а в Grand (в процентах).</div>
+        </div>
+      
+        <div class="slider-group" data-title="Средний депозит"
+         data-desc="Средний объём средств, положенных пользователями на депозит за последние 10 дней.">
+          <label for="avg-deposit" class="setting-name">Ср. депозит
+            <span id="val-deposit" class="slider-value">50%</span>
+          </label>
+          <input
+            type="range"
+            id="avg-deposit"
+            min="0"
+            max="100"
+            step="1"
+            value="50"
+          >
+          <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+          <div class="tooltip">Средний объём средств, положенных пользователями на депозит за последние 10 дней.</div>
+        </div>
+      
+        <div class="slider-group" data-title="Средняя подписка"
+         data-desc="Среднее число пользователей, оформивших подписку за выбранный период.">
+          <label for="avg-subscriptions" class="setting-name">Ср. подписка
+            <span id="val-subscriptions" class="slider-value">50%</span>
+          </label>
+          <input
+            type="range"
+            id="avg-subscriptions"
+            min="0"
+            max="100"
+            step="1"
+            value="50"
+          >
+          <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+          <div class="tooltip">Среднее число пользователей, оформивших подписку за выбранный период.</div>
+        </div>
+      </aside>
+
+  <!-- Секция с метриками -->
+  <section class="metrics">
+    <div class="metrics-list">
+
+        <div class="metric-item" data-title="Суточное рождение"
+        data-desc="Ежедневная генерация токенов Grand">
+            <div class="metric-title">Суточное рождение</div>
+            <div class="metric-value"> <span class="g-mask"></span> 10 000 000</div>
+            <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+            <div class="tooltip">Ежедневная генерация токенов Grand</div>
+        </div>
+
+      <div class="metric-item" data-title="Глобальный бюджет"
+           data-desc="Бюджет, формируемый пополнением кошельков из разных стран и автоматически перечисляемый на соответствующие расчётные счета.">
+        <div class="metric-title">Глобальный бюджет</div>
+        <div class="metric-value">$1 234 567</div>
+        <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+        <div class="tooltip">Бюджет, формируемый пополнением кошельков из разных стран и автоматически перечисляемый на соответствующие расчетные счета в этих странах.</div>
+      </div>
+      <div class="metric-item" data-title="Всего Grand"
+           data-desc="Общее количество токенов Grand, находящихся в обращении.">
+        <div class="metric-title">Всего Grand</div>
+        <div class="metric-value"> <span class="g-mask"></span> 9 876 543</div>
+        <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+        <div class="tooltip">Общее количество токенов Grand, находящихся в обращении.</div>
+      </div>
+      <div class="metric-item" data-title="Бюджет платформы"
+           data-desc="Внутренний запас Grand: при покупке токены списываются из него и распределяются по нужным резервам.">
+        <div class="metric-title">Бюджет платформы</div>
+        <div class="metric-value">  <span class="g-mask"></span> 2 500 000</div>
+        <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+        <div class="tooltip"> Внутренний запас Grand: при покупке токены списываются из него и поступают на кошелек пользователя. Ежесуточное пополнение сразу делится процентно между реферальными выплатами, бизнес-резервом, депозитами и отправкой добытых токенов пользователям. Бизнес-резерв и депозиты хранятся здесь до момента «заморозки».</div>
+      </div>
+      <div class="metric-item" data-title="Стоимость Grand"
+           data-desc="Цена одного токена, вычисляемая как отношение Глобального бюджета к Всего Grand.">
+        <div class="metric-title">Стоимость Grand</div>
+        <div class="metric-value">$0.12</div>
+        <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+        <div class="tooltip">Цена одного токена Grand, вычисляемая как отношение общего «Глобального бюджета» к «Всего Grand».</div>
+      </div>
+      <div class="metric-item" data-title="Счёт пользователя"
+           data-desc="Индивидуальный баланс пользователя, растущий при покупках и добыче.">
+        <div class="metric-title">Счёт пользователя</div>
+        <div class="metric-value"> <span class="g-mask"></span> 456.78</div>
+        <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+        <div class="tooltip">Индивидуальный баланс пользователя, который растёт при покупках и добыче.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="reset-container">
+    <button class="reset-btn" id="reset-btn">Сбросить значения</button>
+  </div>
+
+  <div class="chart-container">
+    <h2>Распределение Grand</h2>
+    <p class="period">07.05.2025</p>
+    <div class="chart" id="chart">
+      <!-- Бары появятся через JS -->
+      <div class="axis-x">
+      </div>
+    </div>
+  </div>
+
+  
+  
+
+
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" aria-label="Закрыть">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <h1 class="modal-header" id="modal-title"></h1>
+    <h2 class="modal-desc"   id="modal-desc"></h2>
+  </div>
+
+  <!-- Chart.js + ваш скрипт -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <script src="static/js/simulation.js"></script>
+  <script src="static/js/metric.js"></script>
+  <script src="static/js/option.js"></script>
+  <script src="static/js/reset.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar    = document.querySelector('.forecast-sidebar');
+      const toggle     = document.querySelector('.sidebar-toggle');
+      const icon       = toggle.querySelector('i');
+    
+      const metricItems = document.querySelectorAll('.metric-item');
+      const modal        = document.querySelector('.modal');
+      const modalTitle   = document.getElementById('modal-title');
+      const modalDesc    = document.getElementById('modal-desc');
+      const closeBtn     = modal.querySelector('.modal-close');
+    
+      // Функция открытия модалки
+      function openModal(item) {
+        modalTitle.textContent = item.dataset.title;
+        modalDesc .textContent = item.dataset.desc;
+        modal.classList.add('active');
+      }
+    
+      // Метрики (до 760px)
+      metricItems.forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.matchMedia('(max-width: 760px)').matches) {
+            openModal(item);
+          }
+        });
+      });
+    
+      // Слайдеры (до 480px)
+      document
+        .querySelectorAll('.forecast-sidebar .slider-group .info-icon')
+        .forEach(label => {
+          label.addEventListener('click', () => {
+            if (!window.matchMedia('(max-width: 480px)').matches) return;
+            // Здесь берём родительский .slider-group
+            const group = label.closest('.slider-group');
+            if (!group) return;
+            modalTitle.textContent = group.dataset.title;
+            modalDesc .textContent = group.dataset.desc;
+            modal.classList.add('active');
+          });
+        });
+    
+      // Закрытие модалки
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+      modal.addEventListener('click', e => {
+        if (e.target === modal) modal.classList.remove('active');
+      });
+    
+      // Тумблер боковой панели
+      toggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        if (sidebar.classList.contains('collapsed')) {
+          icon.classList.replace('fa-chevron-right','fa-chevron-left');
+        } else {
+          icon.classList.replace('fa-chevron-left','fa-chevron-right');
+        }
+      });
+    });
+    </script>
+    
+</body>
+</html>
