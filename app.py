@@ -66,13 +66,13 @@ async def index():
 @app.route("/admin/dashboard")
 async def admin_dashboard():
     if "user_id" not in session:
-        return await render_template('index.html')
+        return redirect(url_for('index'))  # имя функции, которая обрабатывает "/"
     return await render_template("dashboard.html")
 
 @app.route("/admin/logout")
 async def admin_logout():
     session.pop("user_id", None)
-    return await render_template('index.html')
+    return redirect(url_for('index'))  # редирект на "/"
 
 @app.route("/admin/login", methods=["GET"])
 async def admin_login_page():
