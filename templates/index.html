@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Метрики и распределение эмиссии</title>
+  <link rel="icon" href="static/images/favicon.svg" type="image/svg+xml">
+  <title>Grand Time Formula</title>
 
   <!-- Font Awesome -->
   <link rel="stylesheet"
@@ -221,6 +222,8 @@
         modalTitle.textContent = item.dataset.title;
         modalDesc .textContent = item.dataset.desc;
         modal.classList.add('active');
+
+        document.body.style.overflowY = 'hidden';
       }
     
       // Метрики (до 760px)
@@ -244,15 +247,21 @@
             modalTitle.textContent = group.dataset.title;
             modalDesc .textContent = group.dataset.desc;
             modal.classList.add('active');
+
+            document.body.style.overflowY = 'hidden';
           });
         });
     
       // Закрытие модалки
       closeBtn.addEventListener('click', () => {
         modal.classList.remove('active');
+
+        document.body.style.overflowY = '';
       });
       modal.addEventListener('click', e => {
         if (e.target === modal) modal.classList.remove('active');
+
+        document.body.style.overflowY = '';
       });
     
       // Тумблер боковой панели
