@@ -127,18 +127,16 @@
   <script>
 
     // Заблокировать чтение из localStorage
-    localStorage.getItem = function() {
-    console.warn('localStorage.getItem блокирован — используется только API');
-    return null;
-    };
+    if (location.pathname.startsWith('/admin/dashboard')) {
+      localStorage.getItem = function() {
+        console.warn('localStorage.getItem заблокирован в админке');
+        return null;
+      };
 
-    // Опционально: заблокировать запись
-    localStorage.setItem = function() {
-    console.warn('localStorage.setItem блокирован — используется только API');
-    };
-
-    // И удаление тоже
-    localStorage.removeItem = function() {};
+      localStorage.setItem = function() {
+        console.warn('localStorage.setItem заблокирован в админке');
+      };
+    }
 
     async function patchData(url, payload) {
       const res = await fetch(url, {
