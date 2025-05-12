@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
       // 2. Загрузка новых options
       try {
+        document.getElementById("loader").style.display = "flex";
         const optionsRes = await fetch("/api/options");
         if (!optionsRes.ok) throw new Error("Ошибка загрузки options");
         const options = await optionsRes.json();
@@ -23,10 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (err) {
         console.error("Ошибка при загрузке options:", err);
+      } finally {
+        document.getElementById("loader").style.display = "none";
       }
   
       // 3. Загрузка новых metrics
       try {
+        document.getElementById("loader").style.display = "flex";
         const metricsRes = await fetch("/api/metrics");
         if (!metricsRes.ok) throw new Error("Ошибка загрузки metrics");
         const metrics = await metricsRes.json();
@@ -39,6 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (err) {
         console.error("Ошибка при загрузке metrics:", err);
+      } finally {
+        document.getElementById("loader").style.display = "none";
       }
 
     // 4. Обновление даты
@@ -50,5 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const year = today.getFullYear();
       periodElement.textContent = `${day}.${month}.${year}`;
     }
+
+    document.dispatchEvent(new Event('resetDates'));
     });
   });

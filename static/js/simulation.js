@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const simData = JSON.parse(localStorage.getItem('simulation_data') || '[]');
 
       try {
+        document.getElementById("loader").style.display = "flex";
         const response = await fetch('/api/calculate', {
           method: 'POST',
           headers: {
@@ -219,7 +220,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error('Ошибка при отправке данных на сервер:', error);
+      } finally {
+        document.getElementById("loader").style.display = "none";
       }
     });
+  });
+  document.addEventListener('resetDates', () => {
+    totalDays = 0;
+    periodElement.textContent = formatDate(originalDate);
   });
 });

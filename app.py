@@ -219,8 +219,8 @@ async def api_get_metrics():
     global_budget    = int(metric_dict.get("Глобальный бюджет", Metric(metric_value="0")).metric_value)
 
     # пересчитываем
-    new_total_grand     = total_grand + daily_birth
-    new_platform_budget = platform_budget + daily_birth
+    new_total_grand     = total_grand
+    new_platform_budget = platform_budget
     price_grand         = round(global_budget / new_total_grand, 4) if new_total_grand else 0
 
     # обновляем объекты в памяти (не пишем в БД)
@@ -401,7 +401,7 @@ async def calculate():
     if total_days == 0:
         return jsonify({"status": "error", "message": "Период не указан"}), 400
 
-    if total_days > 1000:
+    if total_days > 100000:
         return jsonify({"status": "error", "message": "Слишком большой диапазон"}), 400
 
     simulations = [generate_simulation(options) for _ in range(total_days)]

@@ -12,6 +12,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return decPart ? `${formattedInt}.${decPart}` : formattedInt;
       }
       
+      function reverseUsersScale(realUsers, max_users) {
+        const midpoint = 500;
+      
+        if (realUsers <= 50_000_000) {
+          const fraction = (realUsers - 1000) / (50_000_000 - 1000);
+          return Math.round(fraction * midpoint);
+        } else {
+          const fraction = (realUsers - 50_000_000) / (max_users - 50_000_000);
+          return Math.round(midpoint + fraction * (1000 - midpoint));
+        }
+      }
   
     const formatPercent = (num) => `${Math.round(num)} %`;
   
@@ -69,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       OptionSubscription.textContent = formatPercent(data.avr_subscribe);
   
       // Установка значений слайдеров
-      document.getElementById("avg-users").value = data.users;
+      document.getElementById("avg-users").value = reverseUsersScale(data.users, data.max_users);
       document.getElementById("avg-rating").value = data.raiting;
       document.getElementById("pay-percent").value = data.avr_share;
       document.getElementById("avg-deposit").value = data.avr_deposit;
@@ -336,16 +347,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Загрузка с сервера
-    fetch("/api/options")
-      .then((res) => {
+    (async () => {
+      const loader = document.getElementById("loader");
+    
+      try {
+        loader.style.display = "flex";
+    
+        const res = await fetch("/api/options");
         if (!res.ok) throw new Error("Ошибка загрузки");
-        return res.json();
-      })
-      .then((data) => {
+    
+        const data = await res.json();
         localStorage.setItem("options", JSON.stringify(data));
         localStorage.setItem("options_timestamp", Date.now().toString());
         renderOptions(data);
-      })
-      .catch((err) => console.error("Ошибка при получении данных:", err));
-  });
+      } catch (err) {
+        console.error("Ошибка при получении данных:", err);
+      } finally {
+        loader.style.display = "none";
+      }
+    })();
+
+});
   

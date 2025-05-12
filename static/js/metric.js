@@ -68,6 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tooltip) tooltip.innerText = metric.tooltip;
       }
     });
+    
+    const paragraphs = document.querySelectorAll('p.ps[data-title]');
+    paragraphs.forEach(p => {
+      const title = p.dataset.title;
+      const metric = metrics.find(m => m.metric_title === title);
+      if (metric) {
+        p.textContent = metric.tooltip;
+      }
+    });
   }
 
   window.updateMetrics = updateMetrics;

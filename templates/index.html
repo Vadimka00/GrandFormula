@@ -21,7 +21,8 @@
             <i class="fa-solid fa-chevron-left"></i>
           </div>
 
-        <h2>Параметры</h2>
+        <h2 style="text-align: center;">Параметры</h2>
+        <p class="ps" data-title="Подсказка в параметрах">пусто</p>
 
 
 
@@ -174,6 +175,7 @@
   <div class="reset-container">
     <button class="reset-btn" id="reset-btn">Сбросить значения</button>
   </div>
+  <p class="ps" style="margin-top: 1rem;" data-title="Подсказка к сбросу">Кнопка "Сбросить значения" востанавливает все значения к первоначальному виду</p>
 
   <div class="chart-container">
     <h2>Распределение Grand</h2>
@@ -197,6 +199,10 @@
     <h2 class="modal-desc"   id="modal-desc"></h2>
   </div>
 
+  <div id="loader" class="loader-overlay" style="display: none;">
+    <div class="loader-spinner"></div>
+  </div>
+
   <!-- Chart.js + ваш скрипт -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -204,6 +210,9 @@
   <script src="static/js/metric.js"></script>
   <script src="static/js/option.js"></script>
   <script src="static/js/reset.js"></script>
+  <script src="static/js/slider-share.js"></script>
+  <script src="static/js/slider-deposit.js"></script>
+  <script src="static/js/slider-subscription.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -223,7 +232,7 @@
         modalDesc .textContent = item.dataset.desc;
         modal.classList.add('active');
 
-        document.body.style.overflowY = 'hidden';
+        document.body.style.overflow = 'hidden';
       }
     
       // Метрики (до 760px)
@@ -248,7 +257,7 @@
             modalDesc .textContent = group.dataset.desc;
             modal.classList.add('active');
 
-            document.body.style.overflowY = 'hidden';
+            document.body.style.overflow = 'hidden';
           });
         });
     
@@ -256,12 +265,12 @@
       closeBtn.addEventListener('click', () => {
         modal.classList.remove('active');
 
-        document.body.style.overflowY = '';
+        document.body.style.overflow = '';
       });
       modal.addEventListener('click', e => {
         if (e.target === modal) modal.classList.remove('active');
 
-        document.body.style.overflowY = '';
+        document.body.style.overflow = '';
       });
     
       // Тумблер боковой панели
