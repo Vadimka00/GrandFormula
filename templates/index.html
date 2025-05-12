@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="icon" href="static/images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="{{ 'images/favicon.svg' | static_versioned }}" type="image/svg+xml">
   <title>Grand Time Formula</title>
 
   <!-- Font Awesome -->
@@ -11,7 +11,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Ваши стили -->
-  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="stylesheet" href="{{ 'css/style.css' | static_versioned }}">
 </head>
 <body>
 
@@ -206,13 +206,13 @@
   <!-- Chart.js + ваш скрипт -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-  <script src="static/js/simulation.js"></script>
-  <script src="static/js/metric.js"></script>
-  <script src="static/js/option.js"></script>
-  <script src="static/js/reset.js"></script>
-  <script src="static/js/slider-share.js"></script>
-  <script src="static/js/slider-deposit.js"></script>
-  <script src="static/js/slider-subscription.js"></script>
+  <script src="{{ 'js/simulation.js' | static_versioned }}"></script>
+  <script src="{{ 'js/metric.js' | static_versioned }}"></script>
+  <script src="{{ 'js/option.js' | static_versioned }}"></script>
+  <script src="{{ 'js/reset.js' | static_versioned }}"></script>
+  <script src="{{ 'js/slider-share.js' | static_versioned }}"></script>
+  <script src="{{ 'js/slider-deposit.js' | static_versioned }}"></script>
+  <script src="{{ 'js/slider-subscription.js' | static_versioned }}"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {

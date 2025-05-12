@@ -58,6 +58,14 @@ def generate_raiting():
     raiting = random.choice(values)
     return raiting
 
+@app.template_filter("static_versioned")
+def static_versioned_filter(filename):
+    path = os.path.join(app.static_folder, filename)
+    if os.path.isfile(path):
+        mtime = int(os.path.getmtime(path))
+        return url_for('static', filename=filename, v=mtime)
+    else:
+        return url_for('static', filename=filename)
 
 @app.route('/')
 async def index():
