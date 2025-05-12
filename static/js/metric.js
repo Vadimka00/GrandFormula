@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         valueEl.innerHTML = `${prefix} ${val}`;
         metricItem.querySelector('.tooltip').innerText = metric.tooltip;
+        metricItem.setAttribute("data-desc", metric.tooltip);
       }
 
       const sliderGroup = document.querySelector(`.slider-group[data-title="${title}"]`);
