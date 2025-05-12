@@ -235,7 +235,6 @@
         // Заголовок метрики
         const title = document.createElement('h2');
         title.textContent = m.metric_title;
-        makeEditable(title, 'metric_title', `/api/metrics/${m.metric_id}`);
         card.appendChild(title);
   
         // Значение метрики (если число)

@@ -395,8 +395,8 @@ async def calculate():
     platform_budget  = int(metric_dict.get("Бюджет платформы", Metric(metric_value="0")).metric_value)
 
     # пересчитываем
-    new_total_grand     = total_grand + total_grands + grand_generation
-    new_platform_budget = platform_budget + total_grands + grand_generation
+    new_total_grand     = total_grand + total_grands
+    new_platform_budget = platform_budget + total_grands
 
     if total_days == 0:
         return jsonify({"status": "error", "message": "Период не указан"}), 400
