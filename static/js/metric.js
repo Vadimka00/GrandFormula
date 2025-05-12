@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (sliderGroup) {
         const tooltip = sliderGroup.querySelector('.tooltip');
         if (tooltip) tooltip.innerText = metric.tooltip;
+        sliderGroup.dataset.desc = metric.tooltip;
       }
     });
     
